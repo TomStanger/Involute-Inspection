@@ -46,12 +46,15 @@ Public Class Form1
     Dim lines() As String = {"First line", "Second line", "Third line"}
     ' Set a variable to the My Documents path.
     Dim mydocpath As String = "C:\Users\tom.stanger\source\repos\Involute Inspection\Involute Inspection\bin\Debug\"
+    Dim prompt As String = String.Empty
+    Dim title As String = String.Empty
+    Dim defaultResponse As String = String.Empty
 
 
     ' Write the string array to a new file named "WriteLines.txt".
     Private Sub OutputIn8000()
 
-        MsgBox("Triggered subroutine")
+        ' MsgBox("Triggered subroutine 8000")
         My.Computer.FileSystem.DeleteFile("PrintScaling8000.txt")
         My.Computer.FileSystem.WriteAllText("PrintScaling8000.txt", PrintAdjX, True)
         My.Computer.FileSystem.WriteAllText("PrintScaling8000.txt", "
@@ -64,7 +67,7 @@ Public Class Form1
 
     Private Sub OutputIn2050()
 
-        MsgBox("Triggered subroutine")
+        'MsgBox("Triggered subroutine 2050")
         My.Computer.FileSystem.DeleteFile("PrintScaling2050.txt")
         My.Computer.FileSystem.WriteAllText("PrintScaling2050.txt", PrintAdjX, True)
         My.Computer.FileSystem.WriteAllText("PrintScaling2050.txt", "
@@ -78,7 +81,7 @@ Public Class Form1
 
     Private Sub OutputInNEW()
 
-        MsgBox("Triggered subroutine")
+        ' MsgBox("Triggered subroutine NEW")
         My.Computer.FileSystem.DeleteFile("PrintScalingNEW.txt")
         My.Computer.FileSystem.WriteAllText("PrintScalingNEW.txt", PrintAdjX, True)
         My.Computer.FileSystem.WriteAllText("PrintScalingNEW.txt", "
@@ -91,13 +94,14 @@ Public Class Form1
 
 
     Private Sub PrintoutScalingToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PrintoutScalingToolStripMenuItem.Click
-        PrintAdjX = InputBox("The current value is " & PrintAdjX & ". What do you want to change the X value to?")
-        PrintAdjY = InputBox("The current value is " & PrintAdjY & ". What do you want to change the Y value to?")
+        PrintAdjX = InputBox("The current value is " & PrintAdjX & ". What do you want to change the X value to?", "Printout Scaling", PrintAdjX)
+        PrintAdjY = InputBox("The current value is " & PrintAdjY & ". What do you want to change the Y value to?", "Printout Scaling", PrintAdjY)
         If PrintDocument1.PrinterSettings.PrinterName = "HP LaserJet 8000 Series PCL6" Then
             OutputIn8000()
         ElseIf PrintDocument1.PrinterSettings.PrinterName = "HP LaserJet 2050 Series PCL6" Then
             OutputIn2050()
-        Else newprintName = InputBox("The default printer is not currently defined yet. Please input the new printer name")
+        Else newprintname = InputBox("The default printer is not currently defined yet. Please input the new printer name")
+            OutputInNEW()
         End If
 
     End Sub
@@ -494,7 +498,7 @@ Public Class Form1
     End Sub
 
     Public Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        MsgBox(PrintDocument1.PrinterSettings.PrinterName)
+        'MsgBox(PrintDocument1.PrinterSettings.PrinterName)
         ' PageSetupDialog1.PageSettings.PaperSize = ps
         Convert2 = 1
         Mm = 25.4
@@ -513,8 +517,7 @@ Public Class Form1
             Using outputFile As New StreamReader(mydocpath & Convert.ToString("PrintScaling8000.txt"))
                 Dim readX As String = outputFile.ReadLine
                 Dim readY As String = outputFile.ReadLine
-                MsgBox(readX)
-                MsgBox(readY)
+
                 PrintAdjX = readX
                 PrintAdjY = readY
             End Using
@@ -522,8 +525,7 @@ Public Class Form1
             Using outputFile As New StreamReader(mydocpath & Convert.ToString("PrintScaling2050.txt"))
                 Dim readX As String = outputFile.ReadLine
                 Dim readY As String = outputFile.ReadLine
-                MsgBox(readX)
-                MsgBox(readY)
+
                 PrintAdjX = readX
                 PrintAdjY = readY
             End Using
@@ -532,8 +534,7 @@ Public Class Form1
             Using outputFile As New StreamReader(mydocpath & Convert.ToString("PrintScalingNEW.txt"))
                 Dim readX As String = outputFile.ReadLine
                 Dim readY As String = outputFile.ReadLine
-                MsgBox(readX)
-                MsgBox(readY)
+
                 PrintAdjX = readX
                 PrintAdjY = readY
             End Using
