@@ -25,6 +25,7 @@ Partial Class Form1
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DrawGrid = New System.Windows.Forms.ToolStripMenuItem()
         Me.GridMarkersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PrintoutScalingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PrintToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.PrintSetupToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PrintToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -63,7 +64,6 @@ Partial Class Form1
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.InchesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PrintDialog1 = New System.Windows.Forms.PrintDialog()
-        Me.PrintoutScalingToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -85,6 +85,12 @@ Partial Class Form1
         Me.GridMarkersToolStripMenuItem.Name = "GridMarkersToolStripMenuItem"
         Me.GridMarkersToolStripMenuItem.Size = New System.Drawing.Size(158, 22)
         Me.GridMarkersToolStripMenuItem.Text = "Grid Markers"
+        '
+        'PrintoutScalingToolStripMenuItem
+        '
+        Me.PrintoutScalingToolStripMenuItem.Name = "PrintoutScalingToolStripMenuItem"
+        Me.PrintoutScalingToolStripMenuItem.Size = New System.Drawing.Size(158, 22)
+        Me.PrintoutScalingToolStripMenuItem.Text = "Printout Scaling"
         '
         'PrintToolStripMenuItem1
         '
@@ -375,12 +381,6 @@ Partial Class Form1
         Me.PrintDialog1.Document = Me.PrintDocument1
         Me.PrintDialog1.UseEXDialog = True
         '
-        'PrintoutScalingToolStripMenuItem
-        '
-        Me.PrintoutScalingToolStripMenuItem.Name = "PrintoutScalingToolStripMenuItem"
-        Me.PrintoutScalingToolStripMenuItem.Size = New System.Drawing.Size(158, 22)
-        Me.PrintoutScalingToolStripMenuItem.Text = "Printout Scaling"
-        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -414,7 +414,7 @@ Partial Class Form1
         Me.Controls.Add(Me.TxtBoxPCD)
         Me.Controls.Add(Me.MenuStrip1)
         Me.Name = "Form1"
-        Me.Text = "Form1"
+        Me.Text = "Involute Inspection"
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
         Me.ResumeLayout(False)

@@ -11,6 +11,9 @@ Imports System.Drawing.Printing
 Imports System.Drawing.Drawing2D
 Imports System.Windows.Forms
 Imports System.Graphics
+Imports System.Net.NetworkInformation
+Imports System.Text.RegularExpressions
+
 
 Public Class Form1
     Inherits System.Windows.Forms.Form
@@ -45,7 +48,7 @@ Public Class Form1
     Dim ODTheo, MeasOD, CircThick, NewThickness2, PA, DP As Double
     Dim lines() As String = {"First line", "Second line", "Third line"}
     ' Set a variable to the My Documents path.
-    Dim mydocpath As String = "C:\Users\tom.stanger\source\repos\Involute Inspection\Involute Inspection\bin\Debug\"
+    Dim mydocpath As String = "\\dathansbs\Company\Design\Datafiles\"
     Dim prompt As String = String.Empty
     Dim title As String = String.Empty
     Dim defaultResponse As String = String.Empty
@@ -53,45 +56,40 @@ Public Class Form1
 
     ' Write the string array to a new file named "WriteLines.txt".
     Private Sub OutputIn8000()
+        Using outputFile As New StreamWriter(mydocpath & Convert.ToString("PrintScaling8000.txt"))
+            outputFile.WriteLine(PrintAdjX)
+            outputFile.WriteLine(PrintAdjY)
 
-        ' MsgBox("Triggered subroutine 8000")
-        My.Computer.FileSystem.DeleteFile("PrintScaling8000.txt")
-        My.Computer.FileSystem.WriteAllText("PrintScaling8000.txt", PrintAdjX, True)
-        My.Computer.FileSystem.WriteAllText("PrintScaling8000.txt", "
-", True)
+        End Using
 
-        My.Computer.FileSystem.WriteAllText("PrintScaling8000.txt", PrintAdjY, True)
-        '    Next
-        'End Using
     End Sub
 
     Private Sub OutputIn2050()
 
-        'MsgBox("Triggered subroutine 2050")
-        My.Computer.FileSystem.DeleteFile("PrintScaling2050.txt")
-        My.Computer.FileSystem.WriteAllText("PrintScaling2050.txt", PrintAdjX, True)
-        My.Computer.FileSystem.WriteAllText("PrintScaling2050.txt", "
-", True)
-
-        My.Computer.FileSystem.WriteAllText("PrintScaling2050.txt", PrintAdjY, True)
-        '    Next
-        'End Using
+        Using outputFile As New StreamWriter(mydocpath & Convert.ToString("PrintScaling2050.txt"))
+            outputFile.WriteLine(PrintAdjX)
+            outputFile.WriteLine(PrintAdjY)
+        End Using
     End Sub
-
 
     Private Sub OutputInNEW()
 
-        ' MsgBox("Triggered subroutine NEW")
-        My.Computer.FileSystem.DeleteFile("PrintScalingNEW.txt")
-        My.Computer.FileSystem.WriteAllText("PrintScalingNEW.txt", PrintAdjX, True)
-        My.Computer.FileSystem.WriteAllText("PrintScalingNEW.txt", "
-", True)
+        If File.Exists(mydocpath & "printScalingNEW.txt") Then
+            File.Create(mydocpath & "printscalingnew1.txt")
+            Using outputFile2 As New StreamWriter(mydocpath & Convert.ToString("PrintScalingnew1.txt"))
+                outputFile2.WriteLine(PrintAdjX)
+                outputFile2.WriteLine(PrintAdjY)
+                outputFile2.Close()
+            End Using
+        Else
 
-        My.Computer.FileSystem.WriteAllText("PrintScalingNEW.txt", PrintAdjY, True)
-        '    Next
-        'End Using
+            Using outputFile As New StreamWriter(mydocpath & Convert.ToString("PrintScalingNEW.txt"))
+
+                outputFile.WriteLine(PrintAdjX)
+                outputFile.WriteLine(PrintAdjY)
+            End Using
+        End If
     End Sub
-
 
     Private Sub PrintoutScalingToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PrintoutScalingToolStripMenuItem.Click
         PrintAdjX = InputBox("The current value is " & PrintAdjX & ". What do you want to change the X value to?", "Printout Scaling", PrintAdjX)
@@ -100,10 +98,12 @@ Public Class Form1
             OutputIn8000()
         ElseIf PrintDocument1.PrinterSettings.PrinterName = "HP LaserJet 2050 Series PCL6" Then
             OutputIn2050()
+        ElseIf PrintDocument1.PrinterSettings.PrinterName = newprintname Then
+            OutputInNEW()
         Else newprintname = InputBox("The default printer is not currently defined yet. Please input the new printer name")
+            PrintDocument1.PrinterSettings.PrinterName = newprintname
             OutputInNEW()
         End If
-
     End Sub
     Private Sub HowToRunToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HowToRunToolStripMenuItem.Click
         MsgBox("To run this program, fill In all Of the input boxes With the exact details. Once finished, Click run. You can choose whether you want to add a grid And CM interval markers onto the paper before printing.")
@@ -126,24 +126,6 @@ Public Class Form1
             orientation = 0
         End If
 
-        ' Access of shared member, constant member, enum member or nested type through an instance
-        '        If PageSetupDialog1.PageSettings.PaperSize.Kind.A3 Then
-        '#Enable Warning BC42025 ' Access of shared member, constant member, enum member or nested type through an instance
-        '            MsgBox("A3 was selected")
-        '            ' PrintDocument1.DefaultPageSettings.PaperSize = New PaperSize("A3 tom", 3508, 4961)
-        '            PrintDocument1.DefaultPageSettings.PaperSize = PageSetupDialog1.PageSettings.PaperSize
-        '        End If
-
-        'PrintDocument1.DefaultPageSettings.PaperSize.RawKind = 8
-
-        'PrintDocument1.DefaultPageSettings.PaperSize.RawKind = 8
-        'PrintDocument1.DefaultPageSettings.PaperSize = PageSetupDialog1.PageSettings.PaperSize
-        'PrintDocument1.DefaultPageSettings.PaperSize.RawKind = PaperKind.A3
-        'PageSetupDialog1.PageSettings.PaperSize.RawKind = PaperKind.A3
-
-        'PrintDocument1.DefaultPageSettings.PaperSize = PageSetupDialog1.PageSettings.PaperSize
-
-        'PrintDocument1.DefaultPageSettings.PaperSource.RawKind = 3
         PrintDocument1.Print()
     End Sub
 
@@ -162,8 +144,6 @@ Public Class Form1
         Debug.WriteLine(paperheight)
         Dpi = e.Graphics.DpiX
         Dpm = Dpi / Mm
-
-
 
         If orientation = 1 Then
 
@@ -188,12 +168,11 @@ Public Class Form1
         'e.Graphics.TranslateTransform(-BoxWidth / Dpm / 2, -BoxHeight / Dpm / 2)
 
         e.Graphics.TranslateTransform(0, (MajorDia * Mm / 2 + MinorDia * Mm / 2) / 2 * ScaleSize)
-        '' e.Graphics.ScaleTransform(sx:=ScaleSize, sy:=ScaleSize)
+        ' e.Graphics.ScaleTransform(sx:=ScaleSize, sy:=ScaleSize)
         DrawScale = ScaleSize
         PlotGraphics(e.Graphics)
         PrintCheck()
         'e.Graphics.TranslateTransform(-BoxWidth / Dpm / 2, -(BoxHeight / Dpm / 2 + (MajorDia * Mm / 2 + MinorDia * Mm / 2) / 2 * DrawScale))
-
 
     End Sub
 
@@ -532,6 +511,7 @@ Public Class Form1
         Else PrintDocument1.PrinterSettings.PrinterName = newprintname
             OutputInNEW()
             Using outputFile As New StreamReader(mydocpath & Convert.ToString("PrintScalingNEW.txt"))
+
                 Dim readX As String = outputFile.ReadLine
                 Dim readY As String = outputFile.ReadLine
 
