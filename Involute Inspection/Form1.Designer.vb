@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class Form1
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class Form1
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DrawGrid = New System.Windows.Forms.ToolStripMenuItem()
@@ -41,8 +41,6 @@ Partial Class Form1
         Me.btnCalc = New System.Windows.Forms.Button()
         Me.TxtBoxScale = New System.Windows.Forms.TextBox()
         Me.LblScale = New System.Windows.Forms.Label()
-        Me.lblCoordNo = New System.Windows.Forms.Label()
-        Me.TxtBoxCoordNo = New System.Windows.Forms.TextBox()
         Me.LblODTheo = New System.Windows.Forms.Label()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -126,7 +124,7 @@ Partial Class Form1
         '
         'TxtBoxTitle
         '
-        Me.TxtBoxTitle.Location = New System.Drawing.Point(167, 302)
+        Me.TxtBoxTitle.Location = New System.Drawing.Point(167, 276)
         Me.TxtBoxTitle.Name = "TxtBoxTitle"
         Me.TxtBoxTitle.Size = New System.Drawing.Size(100, 20)
         Me.TxtBoxTitle.TabIndex = 9
@@ -134,7 +132,7 @@ Partial Class Form1
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(22, 305)
+        Me.Label1.Location = New System.Drawing.Point(22, 279)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(140, 13)
         Me.Label1.TabIndex = 81
@@ -175,7 +173,7 @@ Partial Class Form1
         '
         'btnCalc
         '
-        Me.btnCalc.Location = New System.Drawing.Point(167, 342)
+        Me.btnCalc.Location = New System.Drawing.Point(167, 316)
         Me.btnCalc.Name = "btnCalc"
         Me.btnCalc.Size = New System.Drawing.Size(100, 23)
         Me.btnCalc.TabIndex = 10
@@ -184,7 +182,7 @@ Partial Class Form1
         '
         'TxtBoxScale
         '
-        Me.TxtBoxScale.Location = New System.Drawing.Point(168, 273)
+        Me.TxtBoxScale.Location = New System.Drawing.Point(168, 247)
         Me.TxtBoxScale.Name = "TxtBoxScale"
         Me.TxtBoxScale.Size = New System.Drawing.Size(100, 20)
         Me.TxtBoxScale.TabIndex = 8
@@ -192,27 +190,11 @@ Partial Class Form1
         'LblScale
         '
         Me.LblScale.AutoSize = True
-        Me.LblScale.Location = New System.Drawing.Point(129, 276)
+        Me.LblScale.Location = New System.Drawing.Point(129, 250)
         Me.LblScale.Name = "LblScale"
         Me.LblScale.Size = New System.Drawing.Size(34, 13)
         Me.LblScale.TabIndex = 74
         Me.LblScale.Text = "Scale"
-        '
-        'lblCoordNo
-        '
-        Me.lblCoordNo.AutoSize = True
-        Me.lblCoordNo.Location = New System.Drawing.Point(48, 250)
-        Me.lblCoordNo.Name = "lblCoordNo"
-        Me.lblCoordNo.Size = New System.Drawing.Size(115, 13)
-        Me.lblCoordNo.TabIndex = 73
-        Me.lblCoordNo.Text = "Number of Coordinates"
-        '
-        'TxtBoxCoordNo
-        '
-        Me.TxtBoxCoordNo.Location = New System.Drawing.Point(168, 247)
-        Me.TxtBoxCoordNo.Name = "TxtBoxCoordNo"
-        Me.TxtBoxCoordNo.Size = New System.Drawing.Size(100, 20)
-        Me.TxtBoxCoordNo.TabIndex = 7
         '
         'LblODTheo
         '
@@ -245,7 +227,7 @@ Partial Class Form1
         'ListBox1
         '
         Me.ListBox1.FormattingEnabled = True
-        Me.ListBox1.Location = New System.Drawing.Point(42, 407)
+        Me.ListBox1.Location = New System.Drawing.Point(42, 381)
         Me.ListBox1.Name = "ListBox1"
         Me.ListBox1.Size = New System.Drawing.Size(318, 134)
         Me.ListBox1.TabIndex = 77
@@ -290,7 +272,7 @@ Partial Class Form1
         'LblDp
         '
         Me.LblDp.AutoSize = True
-        Me.LblDp.Location = New System.Drawing.Point(47, 453)
+        Me.LblDp.Location = New System.Drawing.Point(47, 427)
         Me.LblDp.Name = "LblDp"
         Me.LblDp.Size = New System.Drawing.Size(78, 13)
         Me.LblDp.TabIndex = 67
@@ -364,6 +346,7 @@ Partial Class Form1
         'MenuStrip1
         '
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PrintToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.HelpToolStripMenuItem, Me.InchesToolStripMenuItem})
+        Me.MenuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(1202, 24)
@@ -395,8 +378,6 @@ Partial Class Form1
         Me.Controls.Add(Me.btnCalc)
         Me.Controls.Add(Me.TxtBoxScale)
         Me.Controls.Add(Me.LblScale)
-        Me.Controls.Add(Me.lblCoordNo)
-        Me.Controls.Add(Me.TxtBoxCoordNo)
         Me.Controls.Add(Me.LblODTheo)
         Me.Controls.Add(Me.ListBox1)
         Me.Controls.Add(Me.lblDepth)
@@ -440,8 +421,6 @@ Partial Class Form1
     Friend WithEvents btnCalc As Button
     Friend WithEvents TxtBoxScale As TextBox
     Friend WithEvents LblScale As Label
-    Friend WithEvents lblCoordNo As Label
-    Friend WithEvents TxtBoxCoordNo As TextBox
     Friend WithEvents LblODTheo As Label
     Friend WithEvents HelpToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents AboutToolStripMenuItem As ToolStripMenuItem

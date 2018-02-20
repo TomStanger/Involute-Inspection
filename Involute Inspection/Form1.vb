@@ -17,16 +17,17 @@ Imports System.Text.RegularExpressions
 
 Public Class Form1
     Inherits System.Windows.Forms.Form
-    Dim ShapeType, newprintname As String
+    Dim ShapeType, newprintname, dg, gm As String
     Dim NewDia, Difference, Increment, Ht, x1d, y1d, x2d, y2d, Mm, DrawScale, Convert2 As Double
     Dim NewThickness, NewAng, CordThick As Double
     Dim PCD, PCR, BCD, CircPitch, SpaceThick, DiaDiv, Formula1, Formula2, Formula3, Formula4, Formula5, Formula6, Formula7, New_Pa, New_PaR, ConvertImpMet, ConvertRad, ConvertDeg As Double
+    Dim InputDp, InputPa, InputTeethNo, InputToothThick, InputPaR, MajorDia, MinorDia, MajorRad, MinorRad, Yy, Yy1, Ho, ScaleSize, Dpm, Dpi, PrintAdjX, PrintAdjY As Double
     Dim CoordQuant, mark, mark2, ArrayIndex, CC, Gridvis As Integer
     Dim dX, dY As Single
     Dim GridX1, GridX2, GridY1, GridY2 As Single
     Dim DotCounter As Integer
     Dim BoxWidth, BoxHeight As Single
-    Dim MyGraphics, xCoord(25), yCoord(25) As Object
+    Dim MyGraphics, xCoord(), yCoord() As Object
     Dim inputTitle As Object
     Dim titleFont As New Font("Calibri", 26, FontStyle.Underline)
     Dim depth As Double
@@ -41,14 +42,11 @@ Public Class Form1
     Dim drawBrush2 As New SolidBrush(Color.Red)
     Dim x1, y1, x2, y2, gpxleng, gpxhei As Single
     Public Shared Pen1 As New Pen(Color.Black, 1 / 96)
-    Dim dg, gm As String
-    Dim InputDp, InputPa, InputTeethNo, InputToothThick, InputPaR, MajorDia, MinorDia, MajorRad, MinorRad, Yy, Yy1, Ho, ScaleSize, Dpm, Dpi, PrintAdjX, PrintAdjY As Double
     Dim orientation As Integer
     Dim pageSize As PaperSize
     Dim ODTheo, MeasOD, CircThick, NewThickness2, PA, DP As Double
     Dim lines() As String = {"First line", "Second line", "Third line"}
-    ' Set a variable to the My Documents path.
-    Dim mydocpath As String = "\\dathansbs\Company\Design\Datafiles\"
+    Dim mydocpath As String = "C:\Print Scaling Plotter\"
     Dim prompt As String = String.Empty
     Dim title As String = String.Empty
     Dim defaultResponse As String = String.Empty
@@ -56,54 +54,20 @@ Public Class Form1
 
     ' Write the string array to a new file named "WriteLines.txt".
     Private Sub OutputIn8000()
-        Using outputFile As New StreamWriter(mydocpath & Convert.ToString("PrintScaling8000.txt"))
+        Using outputFile As New StreamWriter(mydocpath & Convert.ToString("Scaling.txt"))
             outputFile.WriteLine(PrintAdjX)
             outputFile.WriteLine(PrintAdjY)
-
+            outputFile.Close()
         End Using
 
-    End Sub
-
-    Private Sub OutputIn2050()
-
-        Using outputFile As New StreamWriter(mydocpath & Convert.ToString("PrintScaling2050.txt"))
-            outputFile.WriteLine(PrintAdjX)
-            outputFile.WriteLine(PrintAdjY)
-        End Using
-    End Sub
-
-    Private Sub OutputInNEW()
-
-        If File.Exists(mydocpath & "printScalingNEW.txt") Then
-            File.Create(mydocpath & "printscalingnew1.txt")
-            Using outputFile2 As New StreamWriter(mydocpath & Convert.ToString("PrintScalingnew1.txt"))
-                outputFile2.WriteLine(PrintAdjX)
-                outputFile2.WriteLine(PrintAdjY)
-                outputFile2.Close()
-            End Using
-        Else
-
-            Using outputFile As New StreamWriter(mydocpath & Convert.ToString("PrintScalingNEW.txt"))
-
-                outputFile.WriteLine(PrintAdjX)
-                outputFile.WriteLine(PrintAdjY)
-            End Using
-        End If
     End Sub
 
     Private Sub PrintoutScalingToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PrintoutScalingToolStripMenuItem.Click
         PrintAdjX = InputBox("The current value is " & PrintAdjX & ". What do you want to change the X value to?", "Printout Scaling", PrintAdjX)
         PrintAdjY = InputBox("The current value is " & PrintAdjY & ". What do you want to change the Y value to?", "Printout Scaling", PrintAdjY)
-        If PrintDocument1.PrinterSettings.PrinterName = "HP LaserJet 8000 Series PCL6" Then
-            OutputIn8000()
-        ElseIf PrintDocument1.PrinterSettings.PrinterName = "HP LaserJet 2050 Series PCL6" Then
-            OutputIn2050()
-        ElseIf PrintDocument1.PrinterSettings.PrinterName = newprintname Then
-            OutputInNEW()
-        Else newprintname = InputBox("The default printer is not currently defined yet. Please input the new printer name")
-            PrintDocument1.PrinterSettings.PrinterName = newprintname
-            OutputInNEW()
-        End If
+
+        OutputIn8000()
+
     End Sub
     Private Sub HowToRunToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HowToRunToolStripMenuItem.Click
         MsgBox("To run this program, fill In all Of the input boxes With the exact details. Once finished, Click run. You can choose whether you want to add a grid And CM interval markers onto the paper before printing.")
@@ -112,7 +76,7 @@ Public Class Form1
         MsgBox("This program Is used to draw the tooth Or space shape of an involute form. It can draw this onto A4 / A3 paper for easy use.")
     End Sub
 
-    Private Sub TxtBoxPCD_TextChanged(sender As Object, e As EventArgs) Handles TxtBoxPCD.TextChanged
+    Private Sub TxtBoxPCD_LostFocus(sender As Object, e As EventArgs) Handles TxtBoxPCD.LostFocus
         PCD = TxtBoxPCD.Text
     End Sub
 
@@ -134,7 +98,6 @@ Public Class Form1
         e.Graphics.PageUnit = GraphicsUnit.Millimeter
 
         Dim paperwidth, paperheight As Single
-
 
         paperwidth = PrintDocument1.DefaultPageSettings.PaperSize.Width
         paperwidth = paperwidth / 100 * 25.4
@@ -168,7 +131,7 @@ Public Class Form1
         'e.Graphics.TranslateTransform(-BoxWidth / Dpm / 2, -BoxHeight / Dpm / 2)
 
         e.Graphics.TranslateTransform(0, (MajorDia * Mm / 2 + MinorDia * Mm / 2) / 2 * ScaleSize)
-        ' e.Graphics.ScaleTransform(sx:=ScaleSize, sy:=ScaleSize)
+
         DrawScale = ScaleSize
         PlotGraphics(e.Graphics)
         PrintCheck()
@@ -210,7 +173,8 @@ Public Class Form1
             TxtBoxCircThick.Text = Val(TxtBoxCircThick.Text) / Convert2
             TxtBoxODTheo.Text = Val(TxtBoxODTheo.Text) / Convert2
             TxtBoxDepth.Text = Val(TxtBoxDepth.Text) / Convert2
-
+            TxtBoxMeasOD.Text = Val(TxtBoxMeasOD.Text) / Convert2
+            TxtBoxPCD.Text = Val(TxtBoxPCD.Text) / Convert2
             Convert2 = 1
 
         Else
@@ -220,6 +184,8 @@ Public Class Form1
             TxtBoxCircThick.Text = Val(TxtBoxCircThick.Text) * Convert2
             TxtBoxODTheo.Text = Val(TxtBoxODTheo.Text) * Convert2
             TxtBoxDepth.Text = Val(TxtBoxDepth.Text) * Convert2
+            TxtBoxMeasOD.Text = Val(TxtBoxMeasOD.Text) * Convert2
+            TxtBoxPCD.Text = Val(TxtBoxPCD.Text) * Convert2
         End If
     End Sub
 
@@ -243,7 +209,7 @@ Public Class Form1
     Public Sub FormPaint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles MyBase.Paint
         Dim PrintGraphics As Graphics = Me.CreateGraphics
     End Sub
-    Private Sub TxtBoxDepth_TextChanged(sender As Object, e As EventArgs) Handles TxtBoxDepth.TextChanged
+    Private Sub TxtBoxDepth_LostFocus(sender As Object, e As EventArgs) Handles TxtBoxDepth.LostFocus
         depth = Val(TxtBoxDepth.Text)
     End Sub
     Public Shared Function Inv(ByVal Ang As Double) As Double
@@ -275,9 +241,6 @@ Public Class Form1
         InputTeethNo = Val(TxtBoxToothNo.Text)
     End Sub
 
-    Private Sub TxtBoxCoordNo_LostFocus(sender As Object, e As EventArgs) Handles TxtBoxCoordNo.LostFocus
-        CoordQuant = Val(TxtBoxCoordNo.Text)
-    End Sub
 
     Private Sub TxtBoxScale_LostFocus(sender As Object, e As EventArgs) Handles TxtBoxScale.LostFocus
         ScaleSize = Val(TxtBoxScale.Text)
@@ -310,14 +273,15 @@ Public Class Form1
     End Sub
 
     Private Sub btnCalc_Click(sender As Object, e As EventArgs) Handles btnCalc.Click
+
+        ReDim Preserve xCoord(CoordQuant)
+        ReDim Preserve yCoord(CoordQuant)
+
         InputDp = InputTeethNo / PCD
         InputToothThick = CircThick + Tan(InputPaR) * (MeasOD - ODTheo)
         MajorDia = MeasOD
         MinorDia = MeasOD - 2 * depth
 
-
-
-        'PCD = InputTeethNo / InputDp
         PCR = PCD / 2
         BCD = PCD * Cos(InputPaR)
         Debug.WriteLine("There")
@@ -369,16 +333,28 @@ Public Class Form1
         BoxHeight = PlotGraph.Height
         Dpi = PlotGraphGraphics.DpiX
         Dpm = Dpi / Mm
-        SetPlotScale(BoxWidth / Dpm, BoxHeight / Dpm)
 
-        PlotGraphGraphics.TranslateTransform(BoxWidth / Dpm / 2, BoxHeight / Dpm / 2)
+        If Increment > 0 Then
 
-        PlaceGrid(PlotGraphGraphics)
-        GridMarkers(PlotGraphGraphics)
-        PlotGraphGraphics.TranslateTransform(-BoxWidth / Dpm / 2, -BoxHeight / Dpm / 2)
-        PlotGraphGraphics.TranslateTransform(BoxWidth / Dpm / 2, BoxHeight / Dpm / 2 + (MajorDia * Mm / 2 + MinorDia * Mm / 2) / 2 * DrawScale)
-        PlotGraphics(PlotGraphGraphics)
-        PlotGraphGraphics.TranslateTransform(-BoxWidth / Dpm / 2, -(BoxHeight / Dpm / 2 + (MajorDia * Mm / 2 + MinorDia * Mm / 2) / 2 * DrawScale))
+
+
+            'ReDim Preserve xCoord(CoordQuant)
+            'ReDim Preserve yCoord(CoordQuant)
+
+            SetPlotScale(BoxWidth / Dpm, BoxHeight / Dpm)
+
+            PlotGraphGraphics.TranslateTransform(BoxWidth / Dpm / 2, BoxHeight / Dpm / 2)
+
+            PlaceGrid(PlotGraphGraphics)
+            GridMarkers(PlotGraphGraphics)
+            PlotGraphGraphics.TranslateTransform(-BoxWidth / Dpm / 2, -BoxHeight / Dpm / 2)
+            PlotGraphGraphics.TranslateTransform(BoxWidth / Dpm / 2, BoxHeight / Dpm / 2 + (MajorDia * Mm / 2 + MinorDia * Mm / 2) / 2 * DrawScale)
+            PlotGraphics(PlotGraphGraphics)
+            PlotGraphGraphics.TranslateTransform(-BoxWidth / Dpm / 2, -(BoxHeight / Dpm / 2 + (MajorDia * Mm / 2 + MinorDia * Mm / 2) / 2 * DrawScale))
+
+
+        End If
+
 
     End Sub
 
@@ -392,12 +368,12 @@ Public Class Form1
         If CC = CoordQuant + 1 Then
             Debug.WriteLine("It's found the coords")
 
-        Dim X1, Y1, X2, Y2 As Single
+            Dim X1, Y1, X2, Y2 As Single
             newC = 1
 
             For newC = 1 To CoordQuant + 1
                 If newC = CoordQuant Then
-                    ' MsgBox("Its finished")
+                    '  MsgBox("Its finished")
                 ElseIf newC <> CoordQuant + 1 Then
                     '*Val(ScaleSize)
                     X1 = xCoord(newC) * Mm * DrawScale * PrintAdjX
@@ -408,11 +384,7 @@ Public Class Form1
                     MyGraphics.DrawLine(Pen1, +X1, -Y1, +X2, -Y2)
                     MyGraphics.DrawArc(Pen1, -MajorDiaX / 2, -MajorDiaY / 2, MajorDiaX, MajorDiaY, 180, 180)
                     MyGraphics.DrawArc(Pen1, -MinorDiaX / 2, -MinorDiaY / 2, MinorDiaX, MinorDiaY, 180, 180)
-                    'Debug.WriteLine(newC)
-                    'Debug.WriteLine(X1)
-                    'Debug.WriteLine(X2)
-                    'Debug.WriteLine(Y1)
-                    'Debug.WriteLine(Y2)
+
 
                 End If
             Next
@@ -470,6 +442,7 @@ Public Class Form1
 
     Sub SetPlotScale(ScaleWidth As Single, ScaleHeight As Single)
         Dim Yscale, Xscale As Double
+
         Xscale = ScaleWidth * 0.9 / (xCoord(1) * Mm * 2)
         Yscale = ScaleHeight * 0.9 / (MajorDia * Mm / 2 - MinorDia * Mm / 2)
         DrawScale = Min(Xscale, Yscale)
@@ -486,50 +459,24 @@ Public Class Form1
         gm = "NO"
         mark = 0
         mark2 = 0
+        CoordQuant = 100
         'PrintAdjX = 0.995
         'PrintAdjY = 1.0015
         PrintDocument1.DefaultPageSettings.Landscape = True
         ' PrintDocument1.DefaultPageSettings.PaperSize = PageSetupDialog1.PageSettings.PaperSize
         PrintDocument1.DefaultPageSettings.PaperSize = PageSetupDialog1.PageSettings.PaperSize
 
-        If PrintDocument1.PrinterSettings.PrinterName = "HP LaserJet 8000 Series PCL6" Then
-            Using outputFile As New StreamReader(mydocpath & Convert.ToString("PrintScaling8000.txt"))
-                Dim readX As String = outputFile.ReadLine
-                Dim readY As String = outputFile.ReadLine
 
-                PrintAdjX = readX
-                PrintAdjY = readY
-            End Using
-        ElseIf PrintDocument1.PrinterSettings.PrinterName = "HP LaserJet 2050 Series PCL6" Then
-            Using outputFile As New StreamReader(mydocpath & Convert.ToString("PrintScaling2050.txt"))
-                Dim readX As String = outputFile.ReadLine
-                Dim readY As String = outputFile.ReadLine
+        Using outputFile As New StreamReader(mydocpath & Convert.ToString("Scaling.txt"))
+            Dim readX As String = outputFile.ReadLine
+            Dim readY As String = outputFile.ReadLine
 
-                PrintAdjX = readX
-                PrintAdjY = readY
-            End Using
-        Else PrintDocument1.PrinterSettings.PrinterName = newprintname
-            OutputInNEW()
-            Using outputFile As New StreamReader(mydocpath & Convert.ToString("PrintScalingNEW.txt"))
+            PrintAdjX = readX
+            PrintAdjY = readY
+            outputFile.Close()
+        End Using
 
-                Dim readX As String = outputFile.ReadLine
-                Dim readY As String = outputFile.ReadLine
 
-                PrintAdjX = readX
-                PrintAdjY = readY
-            End Using
-
-        End If
-        'PrintAdjY = readPrintAdjY
-        'Dim fileReader, fileReader2 As String
-        '        fileReader = My.Computer.FileSystem.ReadAllText("PrintScaling.txt")
-        'Dim readPrintAdjX As String = fileReader.Substring(0, 5)
-        'Dim readPrintAdjY As String = fileReader.Substring(fileReader.Length - 7, 7)
-        'PrintAdjX = readPrintAdjX
-        'PrintAdjY = readPrintAdjY
-        'MsgBox(readPrintAdjX)
-        'MsgBox(readPrintAdjY)
-        ' MsgBox(fileReader)
 
     End Sub
 
